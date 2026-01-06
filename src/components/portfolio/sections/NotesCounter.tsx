@@ -1,9 +1,107 @@
 'use client'
 
+import Image, { type StaticImageData } from 'next/image'
 import { motion } from 'framer-motion'
 import { useMemo } from 'react'
 
+import AWSIcon from '@/assets/icons/AWS-Light.svg'
+import CloudflareIcon from '@/assets/icons/Cloudflare-Light.svg'
+import CSSIcon from '@/assets/icons/CSS.svg'
+import CIcon from '@/assets/icons/C.svg'
+import DockerIcon from '@/assets/icons/Docker.svg'
+import FastAPIIcon from '@/assets/icons/FastAPI.svg'
+import FigmaIcon from '@/assets/icons/Figma.svg'
+import FirebaseIcon from '@/assets/icons/Firebase-Light.svg'
+import GitIcon from '@/assets/icons/Git.svg'
+import GithubIcon from '@/assets/icons/Github-Dark.svg'
+import GithubActionsIcon from '@/assets/icons/GithubActions-Dark.svg'
+import GoIcon from '@/assets/icons/GoLang.svg'
+import GradleIcon from '@/assets/icons/Gradle-Light.svg'
+import HTMLIcon from '@/assets/icons/HTML.svg'
+import HerokuIcon from '@/assets/icons/Heroku.svg'
+import IdeaIcon from '@/assets/icons/Idea-Dark.svg'
+import JavaIcon from '@/assets/icons/Java-Light.svg'
+import JavaScriptIcon from '@/assets/icons/JavaScript.svg'
+import LinuxIcon from '@/assets/icons/Linux-Light.svg'
+import KubernetesIcon from '@/assets/icons/Kubernetes.svg'
+import MySQLIcon from '@/assets/icons/MySQL-Dark.svg'
+import MarkdownIcon from '@/assets/icons/Markdown-Light.svg'
+import NestIcon from '@/assets/icons/NestJS-Dark.svg'
+import NetlifyIcon from '@/assets/icons/Netlify-Light.svg'
+import NextIcon from '@/assets/icons/NextJS-Light.svg'
+import NginxIcon from '@/assets/icons/Nginx.svg'
+import NodeIcon from '@/assets/icons/NodeJS.svg'
+import PostgreSQLIcon from '@/assets/icons/PostgreSQL-Dark.svg'
+import PrismaIcon from '@/assets/icons/Prisma.svg'
+import PhotoshopIcon from '@/assets/icons/Photoshop.svg'
+import PostmanIcon from '@/assets/icons/Postman.svg'
+import PythonIcon from '@/assets/icons/Python-Light.svg'
+import ReactIcon from '@/assets/icons/React.svg'
+import RedisIcon from '@/assets/icons/Redis-Dark.svg'
+import SQLiteIcon from '@/assets/icons/SQLite.svg'
+import SpringIcon from '@/assets/icons/Spring-Light.svg'
+import StyledIcon from '@/assets/icons/StyledComponents.svg'
+import SupabaseIcon from '@/assets/icons/Supabase-Dark.svg'
+import TailwindIcon from '@/assets/icons/TailwindCSS-Light.svg'
+import TsIcon from '@/assets/icons/TypeScript.svg'
+import UnityIcon from '@/assets/icons/Unity-Dark.svg'
+import VercelIcon from '@/assets/icons/Vercel-Light.svg'
+import VisualStudioIcon from '@/assets/icons/VisualStudio-Light.svg'
+import ViteIcon from '@/assets/icons/Vite-Light.svg'
+import VSCodeIcon from '@/assets/icons/VSCode-Dark.svg'
+import VueIcon from '@/assets/icons/Vue.svg'
+import EclipseLightIcon from '@/assets/icons/Eclipse-Light.svg'
 import { techTags as techTagsSource } from '@/lib/data'
+
+const iconMap: Record<string, StaticImageData | undefined> = {
+  TypeScript: TsIcon,
+  JavaScript: JavaScriptIcon,
+  React: ReactIcon,
+  'Next.js': NextIcon,
+  Vue: VueIcon,
+  Vite: ViteIcon,
+  TailwindCSS: TailwindIcon,
+  'styled-components': StyledIcon,
+  C: CIcon,
+  'Node.js': NodeIcon,
+  Docker: DockerIcon,
+  NestJS: NestIcon,
+  Kubernetes: KubernetesIcon,
+  Supabase: SupabaseIcon,
+  Prisma: PrismaIcon,
+  Vercel: VercelIcon,
+  MySQL: MySQLIcon,
+  PostgreSQL: PostgreSQLIcon,
+  SQLite: SQLiteIcon,
+  Redis: RedisIcon,
+  AWS: AWSIcon,
+  Cloudflare: CloudflareIcon,
+  Git: GitIcon,
+  GitHub: GithubIcon,
+  'GitHub Actions': GithubActionsIcon,
+  HTML: HTMLIcon,
+  CSS: CSSIcon,
+  Java: JavaIcon,
+  Python: PythonIcon,
+  Go: GoIcon,
+  Gradle: GradleIcon,
+  Figma: FigmaIcon,
+  Firebase: FirebaseIcon,
+  FastAPI: FastAPIIcon,
+  Netlify: NetlifyIcon,
+  Nginx: NginxIcon,
+  Eclipse: EclipseLightIcon,
+  Heroku: HerokuIcon,
+  Markdown: MarkdownIcon,
+  Linux: LinuxIcon,
+  'VS Code': VSCodeIcon,
+  'Visual Studio': VisualStudioIcon,
+  Unity: UnityIcon,
+  Spring: SpringIcon,
+  Photoshop: PhotoshopIcon,
+  Postman: PostmanIcon,
+  Idea: IdeaIcon,
+}
 
 export default function NotesCounter() {
   const sortedTags = useMemo(() => [...techTagsSource].sort((a, b) => b.count - a.count), [])
@@ -17,43 +115,52 @@ export default function NotesCounter() {
       viewport={{ once: true }}
     >
       <div className="text-center space-y-3">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">기술 앨범</h2>
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">기술 스택</h2>
         <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          워드클라우드 대신 사진 앨범처럼 기술 태그를 정리했습니다. 노트에서 자주 다룬
-          순서대로 색감 있는 타일로 배치해 한눈에 볼 수 있어요.
+          짧은 문장 들어갈 공간
         </p>
       </div>
 
-      <div className="bg-white/5 border border-white/10 rounded-3xl p-4 sm:p-6 shadow-2xl shadow-black/20 backdrop-blur">
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-3 sm:gap-4">
-          {sortedTags.map((tag, index) => (
+      <div className="mx-auto max-w-6xl flex flex-wrap justify-start gap-2 sm:gap-3">
+        {sortedTags.map((tag, index) => {
+          const icon = iconMap[tag.name]
+          const isLongLabel = tag.name.length > 12
+          const labelSize = isLongLabel ? 'text-[10px] sm:text-[11px]' : 'text-xs sm:text-sm'
+
+          return (
             <motion.div
               key={tag.name}
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.85 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.35, delay: index * 0.05 }}
+              transition={{
+                duration: 0.22,
+                delay: index * 0.02,
+                scale: { duration: 0.08, ease: 'easeOut' },
+              }}
               viewport={{ once: true }}
-              className="relative aspect-square rounded-2xl overflow-hidden border border-white/10 bg-white/5 dark:bg-white/5 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.55)]"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.95 }}
+              className="group flex flex-col items-center w-16 sm:w-20 gap-2 sm:gap-3"
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${tag.color}`} />
-              <div className="absolute inset-0">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.14),transparent_35%),radial-gradient(circle_at_50%_80%,rgba(255,255,255,0.16),transparent_38%)]" />
-                <div className="absolute inset-0 bg-black/10 dark:bg-black/30" />
+              <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/5">
+                {icon && (
+                  <Image
+                    src={icon}
+                    alt={`${tag.name} 아이콘`}
+                    width={64}
+                    height={64}
+                    className="drop-shadow-xl"
+                  />
+                )}
               </div>
-
-              <div className="absolute top-2 right-2 px-2 py-1 rounded-full text-[11px] font-semibold bg-white/70 text-gray-900 dark:bg-black/40 dark:text-white/90 shadow-sm">
-                {tag.count}회
-              </div>
-
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-2">
-                <span className="text-xs uppercase tracking-[0.08em] text-white/80">#{index + 1}</span>
-                <span className="mt-1 text-sm sm:text-base font-semibold text-white drop-shadow">
-                  {tag.name}
-                </span>
-              </div>
+              <span
+                className={`${labelSize} font-semibold text-gray-200 text-center opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150 whitespace-nowrap leading-tight`}
+              >
+                {tag.name}
+              </span>
             </motion.div>
-          ))}
-        </div>
+          )
+        })}
       </div>
     </motion.div>
   )
