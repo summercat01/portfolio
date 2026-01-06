@@ -8,9 +8,11 @@ import AWSIcon from '@/assets/icons/AWS-Light.svg'
 import CloudflareIcon from '@/assets/icons/Cloudflare-Light.svg'
 import CSSIcon from '@/assets/icons/CSS.svg'
 import CIcon from '@/assets/icons/C.svg'
+import CursorIcon from '@/assets/icons/Cursor.svg'
 import DockerIcon from '@/assets/icons/Docker.svg'
 import FastAPIIcon from '@/assets/icons/FastAPI.svg'
 import FigmaIcon from '@/assets/icons/Figma.svg'
+import NotionIcon from '@/assets/icons/Notion.svg'
 import FirebaseIcon from '@/assets/icons/Firebase-Light.svg'
 import GitIcon from '@/assets/icons/Git.svg'
 import GithubIcon from '@/assets/icons/Github-Dark.svg'
@@ -62,6 +64,7 @@ const iconMap: Record<string, StaticImageData | undefined> = {
   Vite: ViteIcon,
   TailwindCSS: TailwindIcon,
   'styled-components': StyledIcon,
+  Cursor: CursorIcon,
   C: CIcon,
   'Node.js': NodeIcon,
   Docker: DockerIcon,
@@ -85,6 +88,7 @@ const iconMap: Record<string, StaticImageData | undefined> = {
   Python: PythonIcon,
   Go: GoIcon,
   Gradle: GradleIcon,
+    Notion: NotionIcon,
   Figma: FigmaIcon,
   Firebase: FirebaseIcon,
   FastAPI: FastAPIIcon,
@@ -104,7 +108,79 @@ const iconMap: Record<string, StaticImageData | undefined> = {
 }
 
 export default function NotesCounter() {
-  const sortedTags = useMemo(() => [...techTagsSource].sort((a, b) => b.count - a.count), [])
+  const desiredOrder = [
+    // 상단 12개 (주 사용 스택)
+    'TypeScript',
+    'Next.js',
+    'NestJS',
+    'Supabase',
+    'PostgreSQL',
+    'AWS',
+    'Vercel',
+    'Cloudflare',
+    'GitHub',
+    'Cursor',
+    'Notion',
+    'Figma',
+    // 나머지
+    'JavaScript',
+    'Java',
+    'Python',
+    'Go',
+    'C',
+    'React',
+    'Vue',
+    'Vite',
+    'TailwindCSS',
+    'styled-components',
+    'CSS',
+    'HTML',
+    'Node.js',
+    'FastAPI',
+    'Spring',
+    'MySQL',
+    'SQLite',
+    'Redis',
+    'Firebase',
+    'Prisma',
+    'Docker',
+    'Kubernetes',
+    'Netlify',
+    'Heroku',
+    'Linux',
+    'Nginx',
+    'Postman',
+    'VS Code',
+    'Visual Studio',
+    'Eclipse',
+    'Idea',
+    'Unity',
+    'Git',
+    'GitHub Actions',
+    'Gradle',
+    'Photoshop',
+  ]
+
+  const orderMap = useMemo(() => {
+    const map = new Map<string, number>()
+    desiredOrder.forEach((name, idx) => map.set(name, idx))
+    return map
+  }, [desiredOrder])
+
+  const sortedTags = useMemo(() => {
+    const sorted = [...techTagsSource].sort((a, b) => {
+      const aOrder = orderMap.get(a.name)
+      const bOrder = orderMap.get(b.name)
+
+      if (aOrder !== undefined && bOrder !== undefined) return aOrder - bOrder
+      if (aOrder !== undefined) return -1
+      if (bOrder !== undefined) return 1
+
+      return a.name.localeCompare(b.name)
+    })
+
+    return sorted
+  }, [orderMap])
 
   return (
     <motion.div
@@ -126,6 +202,7 @@ export default function NotesCounter() {
           const icon = iconMap[tag.name]
           const isLongLabel = tag.name.length > 12
           const labelSize = isLongLabel ? 'text-[10px] sm:text-[11px]' : 'text-xs sm:text-sm'
+          const iconSize = tag.name === 'Notion' || tag.name === 'Cursor' ? 54 : 64
 
           return (
             <motion.div
@@ -142,13 +219,19 @@ export default function NotesCounter() {
               whileTap={{ scale: 0.95 }}
               className="group flex flex-col items-center w-16 sm:w-20 gap-2 sm:gap-3"
             >
-              <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/5 border border-white/5">
+              <div
+                className={`flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl border ${
+                  tag.name === 'Cursor' || tag.name === 'Notion'
+                    ? 'bg-white border-white/80 shadow-sm'
+                    : 'bg-white/5 border-white/5'
+                }`}
+              >
                 {icon && (
                   <Image
                     src={icon}
                     alt={`${tag.name} 아이콘`}
-                    width={64}
-                    height={64}
+                    width={iconSize}
+                    height={iconSize}
                     className="drop-shadow-xl"
                   />
                 )}

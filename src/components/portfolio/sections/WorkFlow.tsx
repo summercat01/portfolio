@@ -1,13 +1,51 @@
 'use client'
 
+import Image, { type StaticImageData } from 'next/image'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 export default function WorkFlow() {
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
+  type Step = {
+    id: number
+    title: string
+    subtitle: string
+    icon: string | StaticImageData
+    iconAlt?: string
+    iconWrapperClass?: string
+    color: string
+    description: string
+    details: string[]
+    bgGradient: string
+  }
+
+  const renderIcon = (icon: string | StaticImageData, alt: string, size = 48) => {
+    if (typeof icon === 'string') {
+      return (
+        <span
+          className="inline-flex items-center justify-center"
+          style={{ fontSize: `${size}px` }}
+          aria-label={alt}
+        >
+          {icon}
+        </span>
+      )
+    }
+
+    return (
+      <Image
+        src={icon}
+        alt={`${alt} 아이콘`}
+        width={size}
+        height={size}
+        className="drop-shadow-lg"
+      />
+    )
+  }
+
   // 7개 개발 플로우 데이터
-  const workflowSteps = [
+  const workflowSteps: Step[] = [
     {
       id: 1,
       title: '언어 선택',
@@ -177,7 +215,9 @@ export default function WorkFlow() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="text-4xl mb-3">{step.icon}</div>
+                    <div className="mb-3 flex items-center justify-center">
+                      {renderIcon(step.icon, step.iconAlt ?? step.title, 44)}
+                    </div>
                     <div className="text-sm font-medium text-white drop-shadow-lg">
                       {step.id === 1 && "언어"}
                       {step.id === 2 && "기획"}
@@ -210,7 +250,9 @@ export default function WorkFlow() {
                     {/* 헤더 */}
                     <div className="mb-6">
                       <div className="flex items-center gap-3 mb-3">
-                        <span className="text-3xl">{step.icon}</span>
+                        <span className="shrink-0">
+                          {renderIcon(step.icon, step.iconAlt ?? step.title)}
+                        </span>
                         <div>
                           <div className="text-2xl font-bold text-white drop-shadow-lg">{step.title}</div>
                           <div className="text-sm opacity-90 text-white drop-shadow-md">{step.subtitle}</div>
